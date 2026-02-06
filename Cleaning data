@@ -1,0 +1,26 @@
+#Gets the mean of bill_length_mm 
+penguins %>%  
+#groups the data by island
+  group_by(island) %>% 
+
+#removes null values
+  drop_na() %>% 
+
+#calculates the mean of the bill_length_mm 
+  summarize(mean_bill_length_mm = mean(bill_length_mm))
+
+#Gets the max of the bill_length_mm
+penguins %>%  
+  group_by(island) %>% 
+  drop_na() %>% 
+  summarize(mean_bill_length_mm = max(bill_length_mm))
+
+#Get the mean and max of the bill lengths of the penguins
+penguins %>% 
+  group_by(island, species) %>%
+  drop_na() %>%
+  summarize(mean_bl = mean(bill_length_mm, max_bl = max(bill_length_mm)))
+
+#Filters to pull only the Gentoo species from the dataset
+penguins %>%  
+  filter(species =="Gentoo")
