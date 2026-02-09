@@ -1,0 +1,28 @@
+##Load packages to start using the functions
+library(tidyverse)
+library(skimr)
+library(janitor)
+
+##import the file that you will be using
+healthClaims <- read_excel("/cloud/project/Course 7/Week 3/health_insurance_claims.xlsx")
+  
+##select the data in the "ClaimAmount", and "DiagnosisCode" columns
+trimmed_df <- healthClaims %>% 
+  select(ClaimAmount, DiagnosisCode)
+
+##rename the columns to make  easier to understand
+trimmed_df <- healthClaims %>% 
+  rename(Employment = PatientEmploymentStatus)
+
+## Use united function to cmbine the procedure code and provider specialty columns
+combine <- trimmed_df %>% 
+  select(ProcedureCode, ProviderSpecialty) %>%  
+  unite(ProviderSpecialyCode, c("ProcedureCode", "ProviderSpecialty"), sep = " ")
+
+## Create a column that gets the percentage of claims to income ration to calculate the percentage of their income that goes towards insurance
+mutating <- trimmed_df %>% 
+  mutate(Claim_Income_Ratio = (PatientIncome - ClaimAmount) * 100) 
+
+## Calculate the total amount of claims and the average amount of claims 
+calculate_total_avg <- trimmed_df %>% 
+  summarize(total_claims = sum(ClaimAmount), average_amt_claims = mean(ClaimAmount))
